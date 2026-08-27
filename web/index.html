@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Wen magst du mehr?</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f2f2;
+            padding: 40px;
+        }
+        .container {
+            max-width: 550px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        input, select, button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            cursor: pointer;
+            border: none;
+        }
+        button:hover {
+            background: #0056c7;
+        }
+        #status {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Wen magst du mehr?</h2>
+
+    <!-- Neue Person hinzufügen -->
+    <label>Neue Person hinzufügen:</label>
+    <input type="text" id="newOption" placeholder="Name eingeben">
+    <button onclick="addOption()">Hinzufügen</button>
+
+    <!-- Abstimmungsformular -->
+    <form id="voteForm">
+        <label>Person auswählen:</label>
+        <select id="vote">
+            <!-- Startet leer -->
+        </select>
+
+        <label>Prozentzahl (z.B. 70%):</label>
+        <input type="number" id="percent" placeholder="Prozentzahl eingeben" required>
+
+        <button type="submit">Absenden</button>
+    </form>
+
+    <p id="status"></p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script>
+    // EmailJS initialisieren
+    (function(){
+        emailjs.init("SW978Roe_-vxAjEy3"); 
+    })();
+
+    // Neue Person hinzufügen
+    function addOption() {
+        const newOptionText = document.getElementById("newOption").value;
+        if (newOptionText.trim() === "") return;
+
+        const select = document.getElementById("vote");
+        const newOption = document.createElement("option");
+        newOption.value = newOptionText;
+        newOption.textContent = newOptionText;
+
+        select.appendChild(newOption);
+        document.getElementById("newOption").value = "";
+    }
+
+    // Formular absenden
+    document.getElementById("voteForm").addEventListener("submit", function(e){
+        e.preventDefault();
+
+        const vote = document.getElementById("vote").value;
+        const percent = document.getElementById("percent").value;
+
+        emailjs.send("service_zgc3yik", "template_9arieko", {
+            vote: vote,
+            percent: percent,
+            email_to: "mark2junior2@gmail.com"
+        }).then(function() {
+            document.getElementById("status").innerText = "Erfolgreich gesendet!";
+        }, function(error) {
+            document.getElementById("status").innerText = "Fehler beim Senden!";
+        });
+    });
+</script>
+
+</body>
+</html>
